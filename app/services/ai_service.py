@@ -25,12 +25,13 @@ def get_tags_from_image_url(image_url):
 
         print(f"!!! AI LOCAL (Hugging Face): Đang phân loại ảnh {image_url}...")
         predictions = classifier(img)
-
+        
         tags = []
-        for pred in predictions[:5]:
+        # TĂNG SỐ LƯỢNG KẾT QUẢ ĐẦU RA LÊN 10 HOẶC 15
+        for pred in predictions[:10]:  # Đã đổi từ [:5] sang [:10]
             labels = pred['label'].split(', ')
             tags.extend(labels)
-
+        
         tags = list(dict.fromkeys(tags)) 
         print(f"!!! AI LOCAL (Hugging Face): Phân loại xong! Tags: {tags}")
         return tags
