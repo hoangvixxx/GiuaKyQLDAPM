@@ -1,0 +1,12 @@
+# Môi trường ảo
+venv/
+
+# File bí mật
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+# Chìa khóa Google Cloud Vision
+gcp_vision_key.json
+serviceAccountKey.json

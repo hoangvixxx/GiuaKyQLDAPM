@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập</title>
+    <style>
+        body { font-family: sans-serif; display: grid; place-items: center; min-height: 90vh; background-image: url('https://i.pinimg.com/1200x/36/19/09/36190987c6cd3c29ec4f1ac202decbf1.jpg');
+         background-size: cover; 
+          background-position: center; 
+          background-repeat: no-repeat; 
+          background-attachment: fixed; }
+        div.panel {
+    background: rgba(255, 255, 255, 0.2); /* Nền trắng, ĐỘ MỜ 20% */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Viền hơi mờ */
+    border-radius: 16px; /* Bo tròn góc nhiều hơn */
+    padding: 25px;
+    width: 400px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Bóng đổ mềm mại */
+    backdrop-filter: blur(10px); /* LÀM MỜ NỀN PHÍA SAU KHUNG */
+    -webkit-backdrop-filter: blur(10px); /* Hỗ trợ trình duyệt Webkit */
+}
+        h2 { text-align: center; margin-top: 0; }
+        input { width: calc(100% - 20px); padding: 10px; margin-bottom: 15px; display: block; border: 1px solid #ddd; border-radius: 5px; }
+        button { width: 100%; padding: 12px 15px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        button.secondary { background: #6c757d; margin-top: 10px; }
+        button.secondary:hover { background: #5a6268; }
+        pre { background: #222; color: #00ff00; padding: 15px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+        #errorOutput { color: red; margin-bottom: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h2>Hệ Thống Ảnh</h2>
+        <input type="email" id="email" value="myuser@gmail.com" placeholder="Email">
+        <input type="password" id="password" value="mypassword123" placeholder="Mật khẩu">
+        <div id="errorOutput"></div>
+        <button onclick="login()">Đăng nhập</button>
+        <button class="secondary" onclick="register()">Đăng ký</button>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:5000";
+        const errorOut = document.getElementById('errorOutput');
+
+        // Hàm 1a: Đăng ký
+        async function register() {
+            const [email, password] = [document.getElementById('email').value, document.getElementById('password').value];
+            errorOut.textContent = "Đang đăng ký...";
+            const res = await fetch(`${API_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                errorOut.textContent = "Đăng ký thành công! Vui lòng đăng nhập.";
+            } else {
+                errorOut.textContent = `Lỗi: ${data.msg}`;
+            }
+        }
+
+        // Hàm 1b: Đăng nhập
+        async function login() {
+            const [email, password] = [document.getElementById('email').value, document.getElementById('password').value];
+            errorOut.textContent = "Đang đăng nhập...";
+            const res = await fetch(`${API_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (res.ok && data.access_token) {
+                // LƯU TOKEN VÀO TRÌNH DUYỆT
+                localStorage.setItem('accessToken', data.access_token);
+                // CHUYỂN HƯỚNG SANG TRANG DEMO
+                window.location.href = '/demo'; 
+            } else {
+                errorOut.textContent = `Lỗi: ${data.msg}`;
+            }
+        }
+    </script>
+</body>
+</html>
