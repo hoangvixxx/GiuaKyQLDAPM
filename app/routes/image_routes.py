@@ -39,7 +39,6 @@ def upload_image():
         
     if file:
         # SỬA LỖI LOGIC: HÀM UPLOAD TRẢ VỀ 2 GIÁ TRỊ (URL và PUBLIC_ID)
-        # Giả sử hàm upload_to_cloudinary vẫn trả về 1 giá trị (URL) như trong code bạn gửi
         image_url = upload_to_cloudinary(file, file.filename) 
         
         if image_url is None:
@@ -73,9 +72,6 @@ def upload_image():
             db.session.rollback()
             return jsonify({"msg": "Lỗi khi lưu CSDL hoặc xử lý AI", "error": str(e)}), 500
 
-# ===============================================
-# === XÓA ẢNH (ĐÃ SỬA LỖI UNBOUNDLOCALERROR) ===
-# ===============================================
 
 @image_bp.route('/<int:image_id>', methods=['DELETE'])
 @jwt_required()
@@ -137,10 +133,6 @@ def delete_image(image_id):
         # Trả về lỗi chi tiết hơn
         return jsonify({"msg": "Lỗi xóa ảnh server", "error": str(e), "public_id_tentative": public_id}), 500
 
-
-# ===============================================
-# === CÁC HÀM GET (LẤY VÀ TÌM KIẾM) ===
-# ===============================================
 
 @image_bp.route('/my-images', methods=['GET'])
 @jwt_required()

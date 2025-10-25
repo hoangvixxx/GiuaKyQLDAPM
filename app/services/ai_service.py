@@ -28,7 +28,7 @@ def get_tags_from_image_url(image_url):
         
         tags = []
         # TĂNG SỐ LƯỢNG KẾT QUẢ ĐẦU RA LÊN 10 HOẶC 15
-        for pred in predictions[:10]:  # Đã đổi từ [:5] sang [:10]
+        for pred in predictions[:10]: 
             labels = pred['label'].split(', ')
             tags.extend(labels)
         
